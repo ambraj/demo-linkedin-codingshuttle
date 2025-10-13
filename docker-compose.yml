@@ -1,0 +1,32 @@
+services:
+  post-db:
+    image: postgres:latest
+    container_name: post-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=post-db
+    volumes:
+      - post-db-data:/var/lib/postgresql/data
+    networks:
+      - network
+
+  posts-service:
+    image: ambraj/posts-service
+    container_name: posts-service
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://post-db:5432/post-db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+    depends_on:
+      - post-db
+    networks:
+      - network
+
+volumes:
+  post-db-data:
+
+networks:
+  network:

@@ -6,7 +6,6 @@ import com.codingshuttle.linkedin.posts_service.service.PostService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,10 +24,10 @@ public class PostsController {
 
     @PostMapping
     public ResponseEntity<PostDto> post(@RequestBody PostCreateRequestDto postCreateRequestDto, HttpServletRequest request) {
-        log.info("Received request to create post: {}", postCreateRequestDto);
+        log.info("Received request to create post: RequestId: {}", request.getAttribute("requestId"));
         PostDto postDto = postService.createPost(postCreateRequestDto, 1L);
 
-        return new ResponseEntity<>(postDto, CREATED);
+        return ResponseEntity.status(CREATED).body(postDto);
     }
 
 }

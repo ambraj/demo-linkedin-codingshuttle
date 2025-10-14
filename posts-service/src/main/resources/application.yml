@@ -4,7 +4,7 @@ spring:
 
 # postgres db config
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://post-db:5432/post-db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/post-db}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
   jpa:
@@ -18,3 +18,5 @@ spring:
 #enable AOP
   aop:
     auto: true
+
+# docker run --name local-post-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=post-db -p 5432:5432 -d postgres

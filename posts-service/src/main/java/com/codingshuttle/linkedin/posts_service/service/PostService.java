@@ -3,10 +3,13 @@ package com.codingshuttle.linkedin.posts_service.service;
 import com.codingshuttle.linkedin.posts_service.dto.PostCreateRequestDto;
 import com.codingshuttle.linkedin.posts_service.dto.PostDto;
 import com.codingshuttle.linkedin.posts_service.entity.Post;
+import com.codingshuttle.linkedin.posts_service.exception.ResourceNotFoundException;
 import com.codingshuttle.linkedin.posts_service.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -20,5 +23,18 @@ public class PostService {
         post.setUserId(userId);
         Post savedPost = postRepository.save(post);
         return modelMapper.map(savedPost, PostDto.class);
+    }
+
+    public PostDto getPostById(Long postId) {
+        Post post = postRepository.findById(postId)
+                .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + postId));
+        return modelMapper.map(post, PostDto.class);
+    }
+
+    public List<PostDto> getAllPostsForUser(Long userId) {
+        List<Post> posts = postRepository.findAllByUserId(userId);
+        return posts.stream()
+                .map(post -> modelMapper.map(post, PostDto.class))
+                .toList();
     }
 }

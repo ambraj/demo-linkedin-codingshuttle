@@ -34,9 +34,9 @@ public class AuthService {
     public String login(LoginRequestDto loginRequestDto) {
         User user = userRepository.findByEmail(loginRequestDto.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email: " + loginRequestDto.getEmail()));
-        if (user != null && PasswordUtil.verifyPassword(loginRequestDto.getPassword(), user.getPassword())) {
-            return jwtService.generateToken(user);
+        if (!PasswordUtil.verifyPassword(loginRequestDto.getPassword(), user.getPassword())) {
+            throw new BadRequestException("Invalid credentials");
         }
-        return null;
+        return jwtService.generateToken(user);
     }
 }

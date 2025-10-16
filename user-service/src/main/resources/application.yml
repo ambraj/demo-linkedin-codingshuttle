@@ -18,6 +18,15 @@ spring:
 jwt:
   secret: kljahgkh-iahgashg-asfgadgh-ahasfh-adhafdh-adhadhadhkhasgkhaskgh
 
+# eureka client configuration
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
+
 server:
   port: 8081
+  servlet:
+    context-path: /users
+
 # docker run --name local-user-db -e POSTGRES_USER=postgres -e POSTGRES_PASSWORD=password -e POSTGRES_DB=user-db -p 5432:5432 -d postgres

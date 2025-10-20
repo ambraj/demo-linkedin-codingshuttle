@@ -2,6 +2,7 @@ package com.codingshuttle.linkedin.connections_service.repository;
 
 import com.codingshuttle.linkedin.connections_service.entity.Person;
 import org.springframework.data.neo4j.repository.Neo4jRepository;
+import org.springframework.data.neo4j.repository.query.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,6 +10,9 @@ import java.util.List;
 @Repository
 public interface PersonRepository extends Neo4jRepository<Person, Long> {
 
+    @Query("MATCH (p1:Person)-[:CONNECTED_TO]->(p2:Person) " +
+            "WHERE p1.userId = $userId " +
+            "RETURN p2")
     List<Person> getFirstDegreeConnections(Long userId);
 
 }

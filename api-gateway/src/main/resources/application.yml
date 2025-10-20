@@ -4,12 +4,13 @@ spring:
   cloud:
     gateway:
       routes:
-        - id: user-service
-          uri: lb://USER-SERVICE
+        - id: users-service
+          uri: lb://USERS-SERVICE
           predicates:
             - Path=/api/v1/users/auth/**
           filters:
             - StripPrefix=2
+
         - id: posts-service
           uri: lb://POSTS-SERVICE
           predicates:
@@ -17,10 +18,17 @@ spring:
           filters:
             - StripPrefix=2
 
+        - id: connections-service
+          uri: lb://CONNECTIONS-SERVICE
+          predicates:
+            - Path=/api/v1/connections/**
+          filters:
+            - StripPrefix=2
+
 eureka:
   client:
     serviceUrl:
-      defaultZone: http://localhost:8761/eureka/
+      defaultZone: ${EUREKA_URI:http://localhost:8761/eureka/}
 
 server:
   port: 8080

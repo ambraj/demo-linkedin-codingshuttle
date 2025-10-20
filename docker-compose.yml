@@ -1,32 +1,148 @@
 services:
-  post-db:
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    environment:
+      #KRaft settings
+      KAFKA_NODE_ID: 0
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      #listeners
+      KAFKA_LISTENERS: PLAINTEXT://kafka:9092,CONTROLLER://kafka:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    networks:
+      - linkedin-network
+
+  kafbat-ui:
+    image: ghcr.io/kafbat/kafka-ui
+    container_name: kafbat-ui
+    ports:
+      - "8090:8080"
+    depends_on:
+      - kafka
+    networks:
+      - linkedin-network
+    environment:
+      - KAFKA_CLUSTERS_0_NAME=kafka
+      - KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS=kafka:9092
+      - KAFKA_CLUSTERS_0_KSQLDBSERVER=kafka:8088
+
+  discovery-server:
+    image: ambraj/discovery-server
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    networks:
+      - linkedin-network
+
+  api-gateway:
+    image: ambraj/api-gateway
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      - EUREKA_URI=http://discovery-server:8761/eureka/
+    depends_on:
+      - discovery-server
+    networks:
+      - linkedin-network
+
+  users-db:
     image: postgres:latest
-    container_name: post-db
+    container_name: users-db
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
-      - POSTGRES_DB=post-db
+      - POSTGRES_DB=users-db
     volumes:
-      - post-db-data:/var/lib/postgresql/data
+      - users-db-data:/var/lib/postgresql/data
     networks:
-      - network
+      - linkedin-network
+
+  users-service:
+    image: ambraj/users-service
+    container_name: users-service
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://users-db:5432/users-db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - EUREKA_URI=http://discovery-server:8761/eureka/
+    depends_on:
+      - discovery-server
+      - users-db
+    networks:
+      - linkedin-network
+
+  posts-db:
+    image: postgres:latest
+    container_name: posts-db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=posts-db
+    volumes:
+      - posts-db-data:/var/lib/postgresql/data
+    networks:
+      - linkedin-network
 
   posts-service:
     image: ambraj/posts-service
     container_name: posts-service
     ports:
-      - "8080:8080"
+      - "8082:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://post-db:5432/post-db
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://posts-db:5432/posts-db
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
+      - EUREKA_URI=http://discovery-server:8761/eureka/
     depends_on:
-      - post-db
+      - posts-db
+      - discovery-server
     networks:
-      - network
+      - linkedin-network
+
+  connections-db:
+    image: neo4j:latest
+    container_name: connections-db
+    ports:
+      - "7687:7687"
+      - "7474:7474"
+    environment:
+      - NEO4J_AUTH=neo4j/password
+    volumes:
+      - connections-db-data:/data
+    networks:
+      - linkedin-network
+
+  connections-service:
+    image: ambraj/connections-service
+    container_name: connections-service
+    ports:
+      - "8083:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=bolt://connections-db:7687
+      - SPRING_DATASOURCE_USERNAME=neo4j
+      - SPRING_DATASOURCE_PASSWORD=password
+      - EUREKA_URI=http://discovery-server:8761/eureka/
+    depends_on:
+      - connections-db
+      - discovery-server
+    networks:
+      - linkedin-network
 
 volumes:
-  post-db-data:
+  posts-db-data:
+  users-db-data:
+  connections-db-data:
+  kafka-data:
 
 networks:
-  network:
+  linkedin-network:

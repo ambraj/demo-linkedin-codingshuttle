@@ -1,0 +1,18 @@
+CREATE (ambuj:Person {userId: 1, name: 'ambuj'});
+CREATE (rashmi:Person {userId: 2, name: 'rashmi'})
+CREATE (vedaant:Person {userId: 3, name: 'vedaant'});
+CREATE (mohit:Person {userId: 4, name: 'mohit'});
+
+MATCH (a:Person {name: 'ambuj'}), (r:Person {name: 'rashmi'})
+CREATE (a)-[:CONNECTED_TO]->(r);
+
+MATCH (r:Person {name: 'rashmi'}), (v:Person {name: 'vedaant'})
+CREATE (r)-[:CONNECTED_TO]->(v);
+
+MATCH (r:Person {name: 'rashmi'}), (m:Person {name: 'mohit'})
+MERGE (r)-[:CONNECTED_TO]->(m)
+MERGE (m)-[:CONNECTED_TO]->(r);
+
+MATCH (p:Person)-[:CONNECTED_TO]->(connected)
+WHERE p.userId = 1
+RETURN connected.userId, connected.name AS first_connections;

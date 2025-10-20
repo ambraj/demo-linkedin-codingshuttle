@@ -4,7 +4,7 @@ spring:
 
 # postgres db config
   datasource:
-    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/posts-db}
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/posts-db}
     username: ${SPRING_DATASOURCE_USERNAME:postgres}
     password: ${SPRING_DATASOURCE_PASSWORD:password}
   jpa:

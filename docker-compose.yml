@@ -58,6 +58,8 @@ services:
   users-db:
     image: postgres:latest
     container_name: users-db
+    ports:
+      - "5432:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
@@ -84,6 +86,8 @@ services:
   posts-db:
     image: postgres:latest
     container_name: posts-db
+    ports:
+      - "5433:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password

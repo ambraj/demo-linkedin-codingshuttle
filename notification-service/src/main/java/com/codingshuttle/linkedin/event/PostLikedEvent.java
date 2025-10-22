@@ -1,4 +1,4 @@
-package com.codingshuttle.linkedin.posts_service.event;
+package com.codingshuttle.linkedin.event;
 
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +8,7 @@ import lombok.Data;
 public class PostLikedEvent {
 
     private Long creatorId;
-    private String likedBy;
+    private Long likedByUserId;
     private Long postId;
 
 }

@@ -87,7 +87,7 @@ services:
     image: postgres:latest
     container_name: posts-db
     ports:
-      - "5432:5432"
+      - "5433:5432"
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
@@ -142,10 +142,41 @@ services:
     networks:
       - linkedin-network
 
+  notification-db:
+    image: postgres:latest
+    container_name: notification-db
+    ports:
+      - "5434:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=notification-db
+    volumes:
+      - notification-db-data:/var/lib/postgresql/data
+    networks:
+      - linkedin-network
+
+  notification-service:
+    image: ambraj/notification-service
+    container_name: notification-service
+    ports:
+      - "8085:8080"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://notification-db:5432/notification-db
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=password
+      - EUREKA_URI=http://discovery-server:8761/eureka/
+    depends_on:
+      - notification-db
+      - discovery-server
+    networks:
+      - linkedin-network
+
 volumes:
   posts-db-data:
   users-db-data:
   connections-db-data:
+  notification-db-data:
   kafka-data:
 
 networks:

@@ -1,9 +1,9 @@
 package com.codingshuttle.linkedin.posts_service.service;
 
+import com.codingshuttle.linkedin.event.PostCreatedEvent;
 import com.codingshuttle.linkedin.posts_service.dto.PostCreateRequestDto;
 import com.codingshuttle.linkedin.posts_service.dto.PostDto;
 import com.codingshuttle.linkedin.posts_service.entity.Post;
-import com.codingshuttle.linkedin.posts_service.event.PostCreatedEvent;
 import com.codingshuttle.linkedin.posts_service.exception.ResourceNotFoundException;
 import com.codingshuttle.linkedin.posts_service.repository.PostRepository;
 import lombok.RequiredArgsConstructor;

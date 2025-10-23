@@ -35,7 +35,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                 final String userId = jwtService.getUserIdFromToken(jwtToken);
 
                 ServerWebExchange serverWebExchange = exchange.mutate()
-                        .request(r -> r.header("X-user-Id", userId))
+                        .request(r -> r.header("X-User-Id", userId))
                         .build();
 
                 return chain.filter(serverWebExchange);

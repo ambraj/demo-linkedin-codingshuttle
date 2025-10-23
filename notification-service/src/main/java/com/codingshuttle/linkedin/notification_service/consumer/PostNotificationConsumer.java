@@ -1,4 +1,4 @@
-package com.codingshuttle.linkedin.notification_service.service;
+package com.codingshuttle.linkedin.notification_service.consumer;
 
 import com.codingshuttle.linkedin.event.PostCreatedEvent;
 import com.codingshuttle.linkedin.event.PostLikedEvent;
@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class PostNotificationService {
+public class PostNotificationConsumer {
 
     private final ConnectionsClient connectionsClient;
     private final NotificationRepository notificationRepository;
@@ -38,7 +38,7 @@ public class PostNotificationService {
         log.info("Received post liked notification: Post {} was liked by user {}",
                 event.getPostId(), event.getLikedByUserId());
 
-        List<PersonDto> connections = connectionsClient.getFirstDegreeConnections(event.getLikedByUserId());
+        List<PersonDto> connections = connectionsClient.getFirstDegreeConnections(event.getCreatorId());
         for (PersonDto connection : connections) {
             String message = String.format("Your connection %s has liked your post %s.", event.getLikedByUserId(), event.getPostId());
             sendNotification(connection.getUserId(), message);

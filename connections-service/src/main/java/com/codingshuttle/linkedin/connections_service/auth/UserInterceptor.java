@@ -1,4 +1,4 @@
-package com.codingshuttle.linkedin.posts_service.auth;
+package com.codingshuttle.linkedin.connections_service.auth;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,6 +14,9 @@ public class UserInterceptor implements HandlerInterceptor {
         String userId = request.getHeader("X-User-Id");
         if (userId != null) {
             UserContextHolder.setCurrentUserId(Long.valueOf(userId));
+
+            String correlationId = java.util.UUID.randomUUID().toString();
+            response.setHeader("X-Correlation-ID", correlationId);
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);
     }

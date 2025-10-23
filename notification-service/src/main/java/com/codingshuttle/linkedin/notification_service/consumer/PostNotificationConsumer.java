@@ -6,6 +6,7 @@ import com.codingshuttle.linkedin.notification_service.client.ConnectionsClient;
 import com.codingshuttle.linkedin.notification_service.dto.PersonDto;
 import com.codingshuttle.linkedin.notification_service.entity.Notification;
 import com.codingshuttle.linkedin.notification_service.repository.NotificationRepository;
+import com.codingshuttle.linkedin.notification_service.service.SendNotificationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -19,7 +20,7 @@ import java.util.List;
 public class PostNotificationConsumer {
 
     private final ConnectionsClient connectionsClient;
-    private final NotificationRepository notificationRepository;
+    private final SendNotificationService sendNotificationService;
 
     @KafkaListener(topics = "post-created-topic")
     public void handlePostCreated(PostCreatedEvent event) {
@@ -29,7 +30,7 @@ public class PostNotificationConsumer {
         List<PersonDto> connections = connectionsClient.getFirstDegreeConnections(event.getCreatorId());
         for (PersonDto connection : connections) {
             String message = String.format("Your connection %s has created a new post. Check it out!", event.getCreatorId());
-            sendNotification(connection.getUserId(), message);
+            sendNotificationService.sendNotification(connection.getUserId(), message);
         }
     }
 
@@ -40,16 +41,9 @@ public class PostNotificationConsumer {
 
         List<PersonDto> connections = connectionsClient.getFirstDegreeConnections(event.getCreatorId());
         for (PersonDto connection : connections) {
-            String message = String.format("Your connection %s has liked your post %s.", event.getLikedByUserId(), event.getPostId());
-            sendNotification(connection.getUserId(), message);
+            String message = String.format("Your connection %s has liked a post %s.", event.getLikedByUserId(), event.getPostId());
+            sendNotificationService.sendNotification(connection.getUserId(), message);
         }
     }
 
-    private void sendNotification(Long userId, String message) {
-        log.info("Sending notification to user {}", userId);
-        Notification notification = new Notification();
-        notification.setUserId(userId);
-        notification.setMessage(message);
-        notificationRepository.save(notification);
-    }
 }

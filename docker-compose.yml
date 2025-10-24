@@ -65,7 +65,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=users-db
     volumes:
-      - users-db-data:/var/lib/postgresql/data
+      - users-db-data:/var/lib/postgresql
     networks:
       - linkedin-network
 
@@ -95,7 +95,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=posts-db
     volumes:
-      - posts-db-data:/var/lib/postgresql/data
+      - posts-db-data:/var/lib/postgresql
     networks:
       - linkedin-network
 
@@ -158,7 +158,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=notification-db
     volumes:
-      - notification-db-data:/var/lib/postgresql/data
+      - notification-db-data:/var/lib/postgresql
     networks:
       - linkedin-network
 

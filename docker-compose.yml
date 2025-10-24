@@ -109,9 +109,11 @@ services:
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
       - EUREKA_URI=http://discovery-server:8761/eureka/
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
     depends_on:
       - posts-db
       - discovery-server
+      - kafka
     networks:
       - linkedin-network
 
@@ -138,9 +140,11 @@ services:
       - SPRING_DATASOURCE_USERNAME=neo4j
       - SPRING_DATASOURCE_PASSWORD=password
       - EUREKA_URI=http://discovery-server:8761/eureka/
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
     depends_on:
       - connections-db
       - discovery-server
+      - kafka
     networks:
       - linkedin-network
 
@@ -162,15 +166,17 @@ services:
     image: ambraj/notification-service
     container_name: notification-service
     ports:
-      - "8085:8080"
+      - "8084:8080"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://notification-db:5432/notification-db
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=password
       - EUREKA_URI=http://discovery-server:8761/eureka/
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
     depends_on:
       - notification-db
       - discovery-server
+      - kafka
     networks:
       - linkedin-network
 

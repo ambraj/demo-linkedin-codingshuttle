@@ -1,14 +1,20 @@
 package com.codingshuttle.linkedin.connections_service.service;
 
+import com.codingshuttle.linkedin.connections_service.auth.UserContextHolder;
+import com.codingshuttle.linkedin.connections_service.config.KafkaTopicConfig;
 import com.codingshuttle.linkedin.connections_service.dto.PersonDto;
 import com.codingshuttle.linkedin.connections_service.entity.Person;
+import com.codingshuttle.linkedin.event.AcceptConnectionRequestEvent;
+import com.codingshuttle.linkedin.event.SendConnectionRequestEvent;
 import com.codingshuttle.linkedin.connections_service.repository.PersonRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -17,6 +23,8 @@ public class ConnectionsService {
 
     private final PersonRepository connectionsRepository;
     private final ModelMapper modelMapper;
+    private final KafkaTemplate<Long, SendConnectionRequestEvent> sendConnectionRequestKafkaTemplate;
+    private final KafkaTemplate<Long, AcceptConnectionRequestEvent> acceptConnectionRequestKafkaTemplate;
 
     public List<PersonDto> getFirstDegreeConnections(Long userId) {
         log.info("Fetching first degree connections for user: {}", userId);
@@ -26,4 +34,54 @@ public class ConnectionsService {
                 .toList();
     }
 
+    public boolean sendConnectionRequest(Long receiverId) {
+        Long senderId = UserContextHolder.getCurrentUserId();
+        log.info("Trying to send connection request to sender: {} -> receiver: {}", senderId, receiverId);
+
+        if (Objects.equals(senderId, receiverId)) {
+            throw new RuntimeException("Cannot send connection request to yourself!");
+        }
+        if (connectionsRepository.connectionRequestExists(senderId, receiverId)) {
+            throw new RuntimeException("Connection request already exists!");
+        }
+        if (connectionsRepository.alreadyConnected(senderId, receiverId)) {
+            throw new RuntimeException("Already connected!");
+        }
+        connectionsRepository.addConnectionRequest(senderId, receiverId);
+        log.info("Connection request sent successfully!");
+        SendConnectionRequestEvent sendConnectionRequestEvent = SendConnectionRequestEvent.builder()
+                .senderId(senderId)
+                .receiverId(receiverId)
+                .build();
+        sendConnectionRequestKafkaTemplate.send(KafkaTopicConfig.SEND_CONNECTION_REQUEST_TOPIC, sendConnectionRequestEvent);
+        return true;
+    }
+
+    public Boolean acceptConnectionRequest(Long senderId) {
+        Long receiverId = UserContextHolder.getCurrentUserId();
+
+        if (!connectionsRepository.connectionRequestExists(senderId, receiverId)) {
+            throw new RuntimeException("Connection request does not exist!");
+        }
+        if (connectionsRepository.alreadyConnected(senderId, receiverId)) {
+            throw new RuntimeException("Already connected!");
+        }
+        connectionsRepository.acceptConnectionRequest(senderId, receiverId);
+        log.info("Connection request accepted successfully!");
+        AcceptConnectionRequestEvent acceptConnectionRequestEvent =
+                AcceptConnectionRequestEvent.builder().senderId(senderId).receiverId(receiverId).build();
+        acceptConnectionRequestKafkaTemplate.send(KafkaTopicConfig.ACCEPT_CONNECTION_REQUEST_TOPIC, acceptConnectionRequestEvent);
+        return true;
+    }
+
+    public Boolean rejectConnectionRequest(Long senderId) {
+        Long receiverId = UserContextHolder.getCurrentUserId();
+
+        if (!connectionsRepository.connectionRequestExists(senderId, receiverId)) {
+            throw new RuntimeException("Connection request does not exist!");
+        }
+        connectionsRepository.rejectConnectionRequest(senderId, receiverId);
+        log.info("Connection request rejected successfully!");
+        return true;
+    }
 }

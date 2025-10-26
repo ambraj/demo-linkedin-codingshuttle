@@ -3,3 +3,14 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+
+USERS_SERVICE_URI: http://users-service
+POSTS_SERVICE_URI: http://posts-service
+CONNECTIONS_SERVICE_URI: http://connections-service
+NOTIFICATION_SERVICE_URI: http://notification-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "health,info,metrics"

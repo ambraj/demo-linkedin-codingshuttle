@@ -13,6 +13,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 server:
+  port: 9030
   servlet:
     context-path: /connections
 

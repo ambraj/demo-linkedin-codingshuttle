@@ -33,7 +33,7 @@ spec:
             - name: DB_NAME
               value: posts-db
           ports:
-            - containerPort: 9010
+            - containerPort: 9020
 
 ---
 apiVersion: v1
@@ -45,4 +45,4 @@ spec:
     app: posts-service
   ports:
     - port: 80
-      targetPort: 9010
+      targetPort: 9020

@@ -24,6 +24,7 @@ eureka:
       defaultZone: http://discovery-server:8761/eureka/
 
 server:
+  port: 9010
   servlet:
     context-path: /users
 

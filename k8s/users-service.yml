@@ -34,7 +34,7 @@ spec:
           - name: DB_NAME
             value: users-db
         ports:
-        - containerPort: 9020
+        - containerPort: 9010
 
 ---
 
@@ -47,6 +47,6 @@ spec:
     app: users-service
   ports:
   - port: 80
-    targetPort: 9020
+    targetPort: 9010
 
   

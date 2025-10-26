@@ -4,7 +4,7 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
 
-users-service-uri: http://users-service
-posts-service-uri: http://posts-service
-connections-service-uri: http://connections-service
-notification-service-uri: http://notification-service
+USERS_SERVICE_URI: http://users-service
+POSTS_SERVICE_URI: http://posts-service
+CONNECTIONS_SERVICE_URI: http://connections-service
+NOTIFICATION_SERVICE_URI: http://notification-service

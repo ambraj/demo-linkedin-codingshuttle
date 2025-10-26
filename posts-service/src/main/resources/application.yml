@@ -2,7 +2,7 @@ spring:
   application:
     name: posts-service
   datasource:
-    url: jdbc:postgresql://${DB_SERVICE:post-db}:5432/${DB_NAME:posts-db}
+    url: jdbc:postgresql://${DB_SERVICE:posts-db}:5432/${DB_NAME:posts-db}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:password}
   jpa:
@@ -15,7 +15,7 @@ spring:
   aop:
     auto: true
   kafka:
-    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVER:kafka:29092}
+    bootstrap-servers: kafka:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer

@@ -12,31 +12,30 @@ spec:
         app: posts-service
     spec:
       containers:
-      - name: posts-service
-        image: ambraj/posts-service:latest
-        resources:
-          limits:
-            memory: "400Mi"
-            cpu: "200m"
-          requests:
-            memory: "200Mi"
-            cpu: "100m"
-        env:
-        - name: SPRING_PROFILES_ACTIVE
-          value: k8s
-        - name: DB_SERVICE
-          value: posts-db
-        - name: DB_USERNAME
-          value: postgres
-        - name: DB_PASSWORD
-          value: password
-        - name: DB_NAME
-          value: posts-db
-        ports:
-        - containerPort: 8082
+        - name: posts-service
+          image: ambraj/posts-service
+          resources:
+            limits:
+              memory: "400Mi"
+              cpu: "200m"
+            requests:
+              memory: "200Mi"
+              cpu: "100m"
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: k8s
+            - name: DB_USERNAME
+              value: postgres
+            - name: DB_PASSWORD
+              value: password
+            - name: DB_SERVICE
+              value: posts-db
+            - name: DB_NAME
+              value: posts-db
+          ports:
+            - containerPort: 9010
 
 ---
-
 apiVersion: v1
 kind: Service
 metadata:
@@ -45,5 +44,5 @@ spec:
   selector:
     app: posts-service
   ports:
-  - port: 80
-    targetPort: 8082
+    - port: 80
+      targetPort: 9010

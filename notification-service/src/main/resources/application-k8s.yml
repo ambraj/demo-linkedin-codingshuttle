@@ -3,3 +3,8 @@ eureka:
   client:
     register-with-eureka: false
     fetch-registry: false
+
+users-service-uri: http://users-service
+posts-service-uri: http://posts-service
+connections-service-uri: http://connections-service
+notification-service-uri: http://notification-service

@@ -119,7 +119,7 @@ This project is a microservices-based LinkedIn clone that demonstrates enterpris
 
 ### Backend
 - **Java**: 25
-- **Spring Boot**: 3.5.6
+- **Spring Boot**: 3.5.7
 - **Spring Cloud**: 2025.0.0
 - **Spring Cloud Gateway**: API Gateway
 - **Spring Cloud Netflix Eureka**: Service Discovery

@@ -24,7 +24,7 @@ The API Gateway handles:
 
 ## 💻 Technology Stack
 
-- **Framework**: Spring Boot 3.5.6
+- **Framework**: Spring Boot 3.5.7
 - **Gateway**: Spring Cloud Gateway
 - **Java Version**: 25
 - **Service Discovery**: Netflix Eureka Client

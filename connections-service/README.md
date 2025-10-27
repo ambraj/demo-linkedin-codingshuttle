@@ -24,7 +24,7 @@ The Connections Service handles:
 
 ## 💻 Technology Stack
 
-- **Framework**: Spring Boot 3.5.6
+- **Framework**: Spring Boot 3.5.7
 - **Java Version**: 25
 - **Database**: Neo4j (Graph Database)
 - **OGM**: Spring Data Neo4j

@@ -24,7 +24,7 @@ The Posts Service handles:
 
 ## 💻 Technology Stack
 
-- **Framework**: Spring Boot 3.5.6
+- **Framework**: Spring Boot 3.5.7
 - **Java Version**: 25
 - **Database**: PostgreSQL
 - **ORM**: Spring Data JPA (Hibernate)

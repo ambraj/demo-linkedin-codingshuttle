@@ -45,6 +45,7 @@ jobs:
             docker push ambraj/${{ matrix.service }}:latest
 
   deploy:
+    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master

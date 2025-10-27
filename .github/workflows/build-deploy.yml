@@ -38,7 +38,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Docker image
-        working-directory: ${ { matrix.service } }
+        working-directory: ${{ matrix.service }}
         run: |
             docker build -t ${{ matrix.service }}:latest .
             docker tag ${{ matrix.service }}:latest ambraj/${{ matrix.service }}:latest

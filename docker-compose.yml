@@ -1,23 +1,28 @@
 services:
 
   kafka:
-    image: docker.io/bitnami/kafka:3.8
+    image: confluentinc/cp-kafka:latest
     container_name: kafka
     volumes:
-      - kafka-data:/bitnami
+      - kafka-data:/var/lib/kafka/data
     networks:
       - linkedin-network
     environment:
-      # KRaft settings
-      - KAFKA_CFG_NODE_ID=0
-      - KAFKA_CFG_PROCESS_ROLES=controller,broker
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
-      # Listeners
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_INTER_BROKER_LISTENER_NAME=PLAINTEXT
+      #KRaft settings
+      KAFKA_NODE_ID: 0
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 0@kafka:9093
+      # Modified listeners configuration
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
 
   kafbat-ui:
     image: ghcr.io/kafbat/kafka-ui
@@ -31,7 +36,9 @@ services:
     environment:
       DYNAMIC_CONFIG_ENABLED: 'true'
       KAFKA_CLUSTERS_0_NAME: linkedin-cluster
-      KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: kafka:29092
+      KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS: kafka:9092
+
+# ---------------------------------------------------------------------- #
 
   discovery-server:
     image: ambraj/discovery-server
@@ -46,12 +53,12 @@ services:
     container_name: api-gateway
     ports:
       - "8080:8080"
-    environment:
-      - EUREKA_URI=http://discovery-server:8761/eureka/
     depends_on:
       - discovery-server
     networks:
       - linkedin-network
+
+# ---------------------------------------------------------------------- #
 
   users-db:
     image: postgres:latest
@@ -71,17 +78,18 @@ services:
     image: ambraj/users-service
     container_name: users-service
     ports:
-      - "8081:8080"
+      - "9010:8080"
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://users-db:5432/users-db
-      - SPRING_DATASOURCE_USERNAME=postgres
-      - SPRING_DATASOURCE_PASSWORD=password
-      - EUREKA_URI=http://discovery-server:8761/eureka/
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=users-db
     depends_on:
       - discovery-server
       - users-db
     networks:
       - linkedin-network
+
+# ---------------------------------------------------------------------- #
 
   posts-db:
     image: postgres:latest
@@ -101,7 +109,7 @@ services:
     image: ambraj/posts-service
     container_name: posts-service
     ports:
-      - "8082:8080"
+      - "9020:8080"
     environment:
       - DB_SERVICE=posts-db
       - DB_USERNAME=postgres
@@ -113,6 +121,8 @@ services:
       - kafka
     networks:
       - linkedin-network
+
+# ---------------------------------------------------------------------- #
 
   connections-db:
     image: neo4j:latest
@@ -131,7 +141,7 @@ services:
     image: ambraj/connections-service
     container_name: connections-service
     ports:
-      - "8083:8080"
+      - "9030:8080"
     environment:
       - SPRING_DATASOURCE_URL=bolt://connections-db:7687
       - SPRING_DATASOURCE_USERNAME=neo4j
@@ -144,6 +154,8 @@ services:
       - kafka
     networks:
       - linkedin-network
+
+# ---------------------------------------------------------------------- #
 
   notification-db:
     image: postgres:latest
@@ -163,7 +175,7 @@ services:
     image: ambraj/notification-service
     container_name: notification-service
     ports:
-      - "8084:8080"
+      - "9040:8080"
     environment:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://notification-db:5432/notification-db
       - SPRING_DATASOURCE_USERNAME=postgres

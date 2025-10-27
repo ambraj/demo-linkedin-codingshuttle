@@ -31,7 +31,10 @@ spec:
             - name: POSTGRES_DB
               value: posts-db
             - name: PGDATA
-              value: /var/lib/postgresql/data/pgdata
+              valueFrom:
+                configMapKeyRef:
+                  name: my-config
+                  key: POSTS_PGDATA
           ports:
             - containerPort: 5432
           volumeMounts:

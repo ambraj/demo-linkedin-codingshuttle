@@ -80,6 +80,7 @@ services:
     ports:
       - "9010:8080"
     environment:
+      - DB_SERVICE=users-db
       - DB_USERNAME=postgres
       - DB_PASSWORD=password
       - DB_NAME=users-db
@@ -146,8 +147,6 @@ services:
       - SPRING_DATASOURCE_URL=bolt://connections-db:7687
       - SPRING_DATASOURCE_USERNAME=neo4j
       - SPRING_DATASOURCE_PASSWORD=password
-      - EUREKA_URI=http://discovery-server:8761/eureka/
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:29092
     depends_on:
       - connections-db
       - discovery-server

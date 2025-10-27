@@ -1,6 +1,6 @@
 spring:
-  datasource:
-    url: jdbc:postgresql://localhost:5432/users-db
+  neo4j:
+    uri: bolt://localhost:7687
   kafka:
     bootstrap-servers: localhost:9092
 

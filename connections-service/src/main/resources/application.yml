@@ -12,13 +12,12 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.LongSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
-server:
-  port: 9030
-  servlet:
-    context-path: /connections
-
-# eureka client configuration
 eureka:
   client:
     serviceUrl:
       defaultZone: http://discovery-server:8761/eureka/
+
+server:
+  port: 9030
+  servlet:
+    context-path: /connections

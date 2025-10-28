@@ -50,4 +50,9 @@ public class ConnectionsController {
         return ResponseEntity.ok(sentRequests);
     }
 
+    @PostMapping("/remove-connection/{userId}")
+    public ResponseEntity<Boolean> removeConnection(@PathVariable Long userId) {
+        return ResponseEntity.ok(connectionsService.removeConnection(userId));
+    }
+
 }

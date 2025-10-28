@@ -106,4 +106,19 @@ public class ConnectionsService {
                 .map(person -> modelMapper.map(person, PersonDto.class))
                 .toList();
     }
+
+    public Boolean removeConnection(Long userId) {
+        Long currentUserId = UserContextHolder.getCurrentUserId();
+        log.info("Trying to remove connection between user: {} and user: {}", currentUserId, userId);
+
+        if (Objects.equals(currentUserId, userId)) {
+            throw new BadRequestException("Cannot remove connection with yourself");
+        }
+        if (!connectionsRepository.alreadyConnected(currentUserId, userId)) {
+            throw new ResourceNotFoundException("Connection does not exist");
+        }
+        connectionsRepository.removeConnection(currentUserId, userId);
+        log.info("Connection removed successfully!");
+        return true;
+    }
 }

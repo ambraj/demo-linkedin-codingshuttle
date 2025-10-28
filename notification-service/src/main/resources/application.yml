@@ -13,7 +13,7 @@ spring:
       hibernate:
         format_sql: false
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: kafka:29092
     consumer:
       auto-offset-reset: earliest
       group-id: ${spring.application.name}

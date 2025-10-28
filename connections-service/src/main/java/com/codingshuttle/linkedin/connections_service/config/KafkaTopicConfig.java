@@ -9,6 +9,7 @@ public class KafkaTopicConfig {
 
     public static final String SEND_CONNECTION_REQUEST_TOPIC = "send-connection-request-topic";
     public static final String ACCEPT_CONNECTION_REQUEST_TOPIC = "accept-connection-request-topic";
+    public static final String USER_CREATED_TOPIC = "user-created-topic";
 
     @Bean
     public NewTopic sendConnectionRequestTopic() {
@@ -18,6 +19,11 @@ public class KafkaTopicConfig {
     @Bean
     public NewTopic acceptConnectionRequestTopic() {
         return new NewTopic(ACCEPT_CONNECTION_REQUEST_TOPIC, 3, (short) 1);
+    }
+
+    @Bean
+    public NewTopic userCreatedTopic() {
+        return new NewTopic(USER_CREATED_TOPIC, 3, (short) 1);
     }
 
 }

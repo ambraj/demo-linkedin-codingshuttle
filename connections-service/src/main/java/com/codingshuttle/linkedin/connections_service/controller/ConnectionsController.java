@@ -38,10 +38,16 @@ public class ConnectionsController {
         return ResponseEntity.ok(connectionsService.rejectConnectionRequest(userId));
     }
 
-    @GetMapping("/pending-requests")
-    public ResponseEntity<List<PersonDto>> getPendingConnectionRequests() {
-        List<PersonDto> pendingRequests = connectionsService.getPendingConnectionRequests();
+    @GetMapping("/received-requests")
+    public ResponseEntity<List<PersonDto>> getReceivedConnectionRequests() {
+        List<PersonDto> pendingRequests = connectionsService.getReceivedConnectionRequests();
         return ResponseEntity.ok(pendingRequests);
+    }
+
+    @GetMapping("/sent-requests")
+    public ResponseEntity<List<PersonDto>> getSentConnectionRequests() {
+        List<PersonDto> sentRequests = connectionsService.getSentConnectionRequests();
+        return ResponseEntity.ok(sentRequests);
     }
 
 }

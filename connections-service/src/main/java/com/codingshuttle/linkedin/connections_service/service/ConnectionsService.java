@@ -87,12 +87,22 @@ public class ConnectionsService {
         return true;
     }
 
-    public List<PersonDto> getPendingConnectionRequests() {
+    public List<PersonDto> getReceivedConnectionRequests() {
         Long userId = UserContextHolder.getCurrentUserId();
         log.info("Fetching pending connection requests for user: {}", userId);
 
         List<Person> pendingRequests = connectionsRepository.getPendingConnectionRequests(userId);
         return pendingRequests.stream()
+                .map(person -> modelMapper.map(person, PersonDto.class))
+                .toList();
+    }
+
+    public List<PersonDto> getSentConnectionRequests() {
+        Long userId = UserContextHolder.getCurrentUserId();
+        log.info("Fetching sent connection requests for user: {}", userId);
+
+        List<Person> sentRequests = connectionsRepository.getSentConnectionRequests(userId);
+        return sentRequests.stream()
                 .map(person -> modelMapper.map(person, PersonDto.class))
                 .toList();
     }

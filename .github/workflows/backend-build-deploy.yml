@@ -16,11 +16,11 @@ jobs:
     strategy:
       matrix:
         service:
-          - backend/api-gateway
-          - backend/users-service
-          - backend/posts-service
-          - backend/connections-service
-          - backend/notification-service
+          - api-gateway
+          - users-service
+          - posts-service
+          - connections-service
+          - notification-service
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -38,7 +38,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Docker image
-        working-directory: ${{ matrix.service }}
+        working-directory: backend/${{ matrix.service }}
         run: |
             docker build -t ${{ matrix.service }}:latest .
             docker tag ${{ matrix.service }}:latest ambraj/${{ matrix.service }}:latest

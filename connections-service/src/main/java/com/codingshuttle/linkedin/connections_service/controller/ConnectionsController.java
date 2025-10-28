@@ -38,4 +38,10 @@ public class ConnectionsController {
         return ResponseEntity.ok(connectionsService.rejectConnectionRequest(userId));
     }
 
+    @GetMapping("/pending-requests")
+    public ResponseEntity<List<PersonDto>> getPendingConnectionRequests() {
+        List<PersonDto> pendingRequests = connectionsService.getPendingConnectionRequests();
+        return ResponseEntity.ok(pendingRequests);
+    }
+
 }

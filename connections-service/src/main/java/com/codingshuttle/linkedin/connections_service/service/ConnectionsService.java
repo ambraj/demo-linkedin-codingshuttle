@@ -4,6 +4,8 @@ import com.codingshuttle.linkedin.connections_service.auth.UserContextHolder;
 import com.codingshuttle.linkedin.connections_service.config.KafkaTopicConfig;
 import com.codingshuttle.linkedin.connections_service.dto.PersonDto;
 import com.codingshuttle.linkedin.connections_service.entity.Person;
+import com.codingshuttle.linkedin.connections_service.exception.BadRequestException;
+import com.codingshuttle.linkedin.connections_service.exception.ResourceNotFoundException;
 import com.codingshuttle.linkedin.event.AcceptConnectionRequestEvent;
 import com.codingshuttle.linkedin.event.SendConnectionRequestEvent;
 import com.codingshuttle.linkedin.connections_service.repository.PersonRepository;
@@ -39,13 +41,13 @@ public class ConnectionsService {
         log.info("Trying to send connection request to sender: {} -> receiver: {}", senderId, receiverId);
 
         if (Objects.equals(senderId, receiverId)) {
-            throw new RuntimeException("Cannot send connection request to yourself!");
+            throw new BadRequestException("Cannot send connection request to yourself");
         }
         if (connectionsRepository.connectionRequestExists(senderId, receiverId)) {
-            throw new RuntimeException("Connection request already exists!");
+            throw new BadRequestException("Connection request already exists");
         }
         if (connectionsRepository.alreadyConnected(senderId, receiverId)) {
-            throw new RuntimeException("Already connected!");
+            throw new BadRequestException("Users are already connected");
         }
         connectionsRepository.addConnectionRequest(senderId, receiverId);
         log.info("Connection request sent successfully!");
@@ -61,10 +63,10 @@ public class ConnectionsService {
         Long receiverId = UserContextHolder.getCurrentUserId();
 
         if (!connectionsRepository.connectionRequestExists(senderId, receiverId)) {
-            throw new RuntimeException("Connection request does not exist!");
+            throw new ResourceNotFoundException("Connection request does not exist");
         }
         if (connectionsRepository.alreadyConnected(senderId, receiverId)) {
-            throw new RuntimeException("Already connected!");
+            throw new BadRequestException("Users are already connected");
         }
         connectionsRepository.acceptConnectionRequest(senderId, receiverId);
         log.info("Connection request accepted successfully!");
@@ -78,10 +80,20 @@ public class ConnectionsService {
         Long receiverId = UserContextHolder.getCurrentUserId();
 
         if (!connectionsRepository.connectionRequestExists(senderId, receiverId)) {
-            throw new RuntimeException("Connection request does not exist!");
+            throw new ResourceNotFoundException("Connection request does not exist");
         }
         connectionsRepository.rejectConnectionRequest(senderId, receiverId);
         log.info("Connection request rejected successfully!");
         return true;
+    }
+
+    public List<PersonDto> getPendingConnectionRequests() {
+        Long userId = UserContextHolder.getCurrentUserId();
+        log.info("Fetching pending connection requests for user: {}", userId);
+
+        List<Person> pendingRequests = connectionsRepository.getPendingConnectionRequests(userId);
+        return pendingRequests.stream()
+                .map(person -> modelMapper.map(person, PersonDto.class))
+                .toList();
     }
 }

@@ -41,12 +41,15 @@ public class ConnectionsService {
         log.info("Trying to send connection request to sender: {} -> receiver: {}", senderId, receiverId);
 
         if (Objects.equals(senderId, receiverId)) {
+            log.error("Cannot send connection request to yourself: senderId={}, receiverId={}", senderId, receiverId);
             throw new BadRequestException("Cannot send connection request to yourself");
         }
         if (connectionsRepository.connectionRequestExists(senderId, receiverId)) {
+            log.error("Connection request already exists: senderId={}, receiverId={}", senderId, receiverId);
             throw new BadRequestException("Connection request already exists");
         }
         if (connectionsRepository.alreadyConnected(senderId, receiverId)) {
+            log.error("Users are already connected: senderId={}, receiverId={}", senderId, receiverId);
             throw new BadRequestException("Users are already connected");
         }
         connectionsRepository.addConnectionRequest(senderId, receiverId);
@@ -63,9 +66,11 @@ public class ConnectionsService {
         Long receiverId = UserContextHolder.getCurrentUserId();
 
         if (!connectionsRepository.connectionRequestExists(senderId, receiverId)) {
+            log.error("Connection request does not exist: senderId={}, receiverId={}", senderId, receiverId);
             throw new ResourceNotFoundException("Connection request does not exist");
         }
         if (connectionsRepository.alreadyConnected(senderId, receiverId)) {
+            log.error("Users are already connected: senderId={}, receiverId={}", senderId, receiverId);
             throw new BadRequestException("Users are already connected");
         }
         connectionsRepository.acceptConnectionRequest(senderId, receiverId);
@@ -80,6 +85,7 @@ public class ConnectionsService {
         Long receiverId = UserContextHolder.getCurrentUserId();
 
         if (!connectionsRepository.connectionRequestExists(senderId, receiverId)) {
+            log.error("Connection request does not exist: senderId={}, receiverId={}", senderId, receiverId);
             throw new ResourceNotFoundException("Connection request does not exist");
         }
         connectionsRepository.rejectConnectionRequest(senderId, receiverId);
@@ -112,9 +118,11 @@ public class ConnectionsService {
         log.info("Trying to remove connection between user: {} and user: {}", currentUserId, userId);
 
         if (Objects.equals(currentUserId, userId)) {
+            log.error("Cannot remove connection with yourself: currentUserId={}, userId={}", currentUserId, userId);
             throw new BadRequestException("Cannot remove connection with yourself");
         }
         if (!connectionsRepository.alreadyConnected(currentUserId, userId)) {
+            log.error("Connection does not exist: currentUserId={}, userId={}", currentUserId, userId);
             throw new ResourceNotFoundException("Connection does not exist");
         }
         connectionsRepository.removeConnection(currentUserId, userId);

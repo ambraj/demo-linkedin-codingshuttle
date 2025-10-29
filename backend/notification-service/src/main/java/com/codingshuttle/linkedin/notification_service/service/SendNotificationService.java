@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -19,6 +21,11 @@ public class SendNotificationService {
         notification.setUserId(userId);
         notification.setMessage(message);
         notificationRepository.save(notification);
+    }
+
+    public List<Notification> getAllNotificationsForUser(Long userId) {
+        log.info("Fetching latest 20 notifications for user {}", userId);
+        return notificationRepository.findTop20ByUserIdOrderByCreatedAtDesc(userId);
     }
 
 }

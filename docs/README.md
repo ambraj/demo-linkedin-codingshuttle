@@ -132,9 +132,13 @@ Notes: For each endpoint the examples show the gateway path (preferred) and the 
   ```
 
 4) **Notification Service** (Kafka consumer, event-driven)
-- The Notification Service is a **Kafka consumer only** — it does not expose REST endpoints.
+- The Notification Service consumes Kafka events and exposes REST endpoints for retrieving notifications.
 - Consumes topics: `post-created-topic`, `post-liked-topic`, `connection-request-sent-topic`, `connection-accepted-topic`
 - Stores notifications to PostgreSQL as they arrive (Event-Driven Architecture pattern)
+
+- `GET /core/notifications` (gateway: `/api/v1/notifications/core/notifications`, direct: `http://localhost:9040/notifications/core/notifications`)  
+  Response: 200 OK with list of NotificationDto (latest 20 notifications for authenticated user, ordered by creation time descending)  
+  Requires JWT.
 
 ## 🧭 Kafka topics & events
 

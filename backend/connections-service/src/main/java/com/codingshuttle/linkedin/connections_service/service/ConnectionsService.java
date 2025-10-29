@@ -129,4 +129,14 @@ public class ConnectionsService {
         log.info("Connection removed successfully!");
         return true;
     }
+
+    public List<PersonDto> getSuggestedConnections() {
+        Long userId = UserContextHolder.getCurrentUserId();
+        log.info("Fetching suggested connections for user: {}", userId);
+
+        List<Person> suggestedConnections = connectionsRepository.getSuggestedConnections(userId);
+        return suggestedConnections.stream()
+                .map(person -> modelMapper.map(person, PersonDto.class))
+                .toList();
+    }
 }

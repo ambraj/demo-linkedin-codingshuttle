@@ -58,4 +58,13 @@ public interface PersonRepository extends Neo4jRepository<Person, Long> {
             "WHERE p1.userId = $userId1 AND p2.userId = $userId2 " +
             "DELETE r")
     void removeConnection(Long userId1, Long userId2);
+
+    @Query("MATCH (p1:Person {userId: $userId}) " +
+            "MATCH (p2:Person) " +
+            "WHERE p2.userId <> $userId " +
+            "AND NOT (p1)-[:CONNECTED_TO]-(p2) " +
+            "AND NOT (p1)-[:REQUESTED_TO]-(p2) " +
+            "AND NOT (p2)-[:REQUESTED_TO]->(p1) " +
+            "RETURN p2")
+    List<Person> getSuggestedConnections(Long userId);
 }

@@ -8,8 +8,7 @@ import toast from 'react-hot-toast';
 const Connections = () => {
   const [connections, setConnections] = useState([]);
   const [pendingRequests, setPendingRequests] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchResults, setSearchResults] = useState([]);
+  const [suggestedConnections, setSuggestedConnections] = useState([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('connections');
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -18,6 +17,7 @@ const Connections = () => {
   useEffect(() => {
     fetchConnections();
     fetchPendingRequests();
+    fetchSuggestedConnections();
   }, []);
 
   const fetchConnections = async () => {
@@ -40,6 +40,15 @@ const Connections = () => {
     }
   };
 
+  const fetchSuggestedConnections = async () => {
+    try {
+      const data = await connectionsService.getSuggestedConnections();
+      setSuggestedConnections(data);
+    } catch (error) {
+      console.error('Failed to load suggested connections');
+    }
+  };
+
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!searchQuery.trim()) return;
@@ -58,6 +67,9 @@ const Connections = () => {
       await connectionsService.sendConnectionRequest(userId);
       toast.success('Connection request sent!');
       setSearchResults(prev => prev.filter(user => user.id !== userId));
+      setSuggestedConnections(prev => prev.filter(user => user.id !== userId));
+      // Refresh suggested connections list after sending a request
+      fetchSuggestedConnections();
     } catch (error) {
       toast.error('Failed to send request');
     }
@@ -79,6 +91,8 @@ const Connections = () => {
       await connectionsService.rejectConnectionRequest(userId);
       toast.success('Request rejected');
       fetchPendingRequests();
+      // Refresh suggested connections list after rejecting a request
+      fetchSuggestedConnections();
     } catch (error) {
       toast.error('Failed to reject request');
     }
@@ -98,25 +112,6 @@ const Connections = () => {
   return (
     <Layout>
       <div className="max-w-4xl mx-auto">
-        {/* Search Bar */}
-        <div className="bg-white rounded-lg shadow p-4 mb-4">
-          <form onSubmit={handleSearch} className="flex gap-2">
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search for people..."
-              className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-linkedin-blue focus:border-transparent outline-none"
-            />
-            <button
-              type="submit"
-              className="px-6 py-2 bg-linkedin-blue text-white rounded-lg font-semibold hover:bg-blue-700 transition"
-            >
-              Search
-            </button>
-          </form>
-        </div>
-
         {/* Tabs */}
         <div className="bg-white rounded-lg shadow mb-4">
           <div className="flex border-b">
@@ -140,18 +135,16 @@ const Connections = () => {
             >
               Requests ({pendingRequests.length})
             </button>
-            {searchResults.length > 0 && (
-              <button
-                onClick={() => setActiveTab('search')}
-                className={`flex-1 px-4 py-3 font-semibold ${
-                  activeTab === 'search'
-                    ? 'text-linkedin-blue border-b-2 border-linkedin-blue'
-                    : 'text-gray-600'
-                }`}
-              >
-                Search Results
-              </button>
-            )}
+            <button
+              onClick={() => setActiveTab('suggested')}
+              className={`flex-1 px-4 py-3 font-semibold ${
+                activeTab === 'suggested'
+                  ? 'text-linkedin-blue border-b-2 border-linkedin-blue'
+                  : 'text-gray-600'
+              }`}
+            >
+              Suggested ({suggestedConnections.length})
+            </button>
           </div>
         </div>
 
@@ -267,7 +260,39 @@ const Connections = () => {
                           </div>
                         </div>
                         <button
-                          onClick={() => handleConnect(user.id)}
+                          onClick={() => handleConnect(user.userId)}
+                          className="flex items-center space-x-2 px-4 py-2 bg-linkedin-blue text-white rounded-full hover:bg-blue-700 transition"
+                        >
+                          <UserPlus size={18} />
+                          <span>Connect</span>
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Suggested Connections Tab */}
+            {activeTab === 'suggested' && (
+              <div className="p-4">
+                {suggestedConnections.length === 0 ? (
+                  <p className="text-center text-gray-500 py-8">No suggested connections at this time</p>
+                ) : (
+                  <div className="space-y-3">
+                    {suggestedConnections.map((user) => (
+                      <div key={user.id} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg">
+                        <div className="flex items-center space-x-3">
+                          <div className="w-12 h-12 rounded-full bg-linkedin-blue flex items-center justify-center text-white font-semibold">
+                            {user.name?.charAt(0)?.toUpperCase()}
+                          </div>
+                          <div>
+                            <h3 className="font-semibold">{user.name}</h3>
+                            <p className="text-sm text-gray-500">{user.email}</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => handleConnect(user.userId)}
                           className="flex items-center space-x-2 px-4 py-2 bg-linkedin-blue text-white rounded-full hover:bg-blue-700 transition"
                         >
                           <UserPlus size={18} />

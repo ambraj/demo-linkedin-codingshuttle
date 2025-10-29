@@ -119,6 +119,18 @@ Notes: For each endpoint the examples show the gateway path (preferred) and the 
   Response: 200 OK with boolean  
   Requires JWT.
 
+- `GET /core/suggested-connections` (gateway: `/api/v1/connections/core/suggested-connections`, direct: `http://localhost:9030/connections/core/suggested-connections`)  
+  Response: 200 OK with list of PersonDto (users suggested for connection — excludes the authenticated user, users already connected, and users with pending connection requests to/from the authenticated user)  
+  Requires JWT (Authorization: Bearer <token>) and the service expects the authenticated user's id (typically forwarded as `X-User-Id` when calling the service directly).
+
+  Example (via API Gateway):
+
+  ```bash
+  curl -X GET "http://localhost:8080/api/v1/connections/core/suggested-connections" \
+    -H "Authorization: Bearer <JWT>" \
+    -H "Content-Type: application/json"
+  ```
+
 4) **Notification Service** (Kafka consumer, event-driven)
 - The Notification Service is a **Kafka consumer only** — it does not expose REST endpoints.
 - Consumes topics: `post-created-topic`, `post-liked-topic`, `connection-request-sent-topic`, `connection-accepted-topic`

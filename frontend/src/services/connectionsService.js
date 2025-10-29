@@ -43,4 +43,12 @@ export const connectionsService = {
     });
     return response.data;
   },
+
+  async getSuggestedConnections() {
+    // Endpoint: /api/v1/connections/core/suggested-connections
+    // Returns list of PersonDto (users suggested for connection)
+    // Excludes: authenticated user, already connected users, users with pending requests
+    const response = await api.get('/connections/core/suggested-connections');
+    return response.data;
+  },
 };

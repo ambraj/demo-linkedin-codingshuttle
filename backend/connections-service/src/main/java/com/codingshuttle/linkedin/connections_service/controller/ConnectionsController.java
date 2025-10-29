@@ -55,4 +55,10 @@ public class ConnectionsController {
         return ResponseEntity.ok(connectionsService.removeConnection(userId));
     }
 
+    @GetMapping("/suggested-connections")
+    public ResponseEntity<List<PersonDto>> getSuggestedConnections() {
+        List<PersonDto> suggestedConnections = connectionsService.getSuggestedConnections();
+        return ResponseEntity.ok(suggestedConnections);
+    }
+
 }

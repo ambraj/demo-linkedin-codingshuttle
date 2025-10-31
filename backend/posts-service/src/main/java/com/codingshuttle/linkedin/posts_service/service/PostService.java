@@ -5,6 +5,7 @@ import com.codingshuttle.linkedin.posts_service.dto.PostCreateRequestDto;
 import com.codingshuttle.linkedin.posts_service.dto.PostDto;
 import com.codingshuttle.linkedin.posts_service.entity.Post;
 import com.codingshuttle.linkedin.posts_service.exception.ResourceNotFoundException;
+import com.codingshuttle.linkedin.posts_service.repository.PostLikeRepository;
 import com.codingshuttle.linkedin.posts_service.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -18,6 +19,7 @@ import java.util.List;
 public class PostService {
 
     private final PostRepository postRepository;
+    private final PostLikeRepository postLikeRepository;
     private final ModelMapper modelMapper;
 
     private final KafkaTemplate<Long, PostCreatedEvent> kafkaTemplate;
@@ -43,7 +45,15 @@ public class PostService {
     public List<PostDto> getAllPostsForUser(Long userId) {
         List<Post> posts = postRepository.findAllByUserId(userId);
         return posts.stream()
-                .map(post -> modelMapper.map(post, PostDto.class))
+                .map(post -> {
+                    PostDto postDto = modelMapper.map(post, PostDto.class);
+                    List<Long> likedByUserIds = postLikeRepository.findByPostId(post.getId())
+                            .stream()
+                            .map(postLike -> postLike.getUserId())
+                            .toList();
+                    postDto.setLikedByUserIds(likedByUserIds);
+                    return postDto;
+                })
                 .toList();
     }
 }

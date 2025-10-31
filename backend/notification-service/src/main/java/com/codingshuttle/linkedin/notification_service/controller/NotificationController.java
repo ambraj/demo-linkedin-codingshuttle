@@ -23,7 +23,7 @@ public class NotificationController {
     private final SendNotificationService sendNotificationService;
     private final ModelMapper modelMapper;
 
-    @GetMapping("/notifications")
+    @GetMapping("/users/allNotifications")
     public ResponseEntity<List<NotificationDto>> getAllNotificationsForUser() {
         Long userId = UserContextHolder.getCurrentUserId();
         log.info("Received request to get all notifications for user: {}", userId);

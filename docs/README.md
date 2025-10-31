@@ -136,9 +136,17 @@ Notes: For each endpoint the examples show the gateway path (preferred) and the 
 - Consumes topics: `post-created-topic`, `post-liked-topic`, `connection-request-sent-topic`, `connection-accepted-topic`
 - Stores notifications to PostgreSQL as they arrive (Event-Driven Architecture pattern)
 
-- `GET /core/notifications` (gateway: `/api/v1/notifications/core/notifications`, direct: `http://localhost:9040/notifications/core/notifications`)  
+- `GET /core/users/allNotifications` (gateway: `/api/v1/notifications/core/users/allNotifications`, direct: `http://localhost:9040/notifications/core/users/allNotifications`)  
   Response: 200 OK with list of NotificationDto (latest 20 notifications for authenticated user, ordered by creation time descending)  
   Requires JWT.
+
+  Example (via API Gateway):
+
+  ```bash
+  curl -X GET "http://localhost:8080/api/v1/notifications/core/users/allNotifications" \
+    -H "Authorization: Bearer <JWT>" \
+    -H "Content-Type: application/json"
+  ```
 
 ## 🧭 Kafka topics & events
 

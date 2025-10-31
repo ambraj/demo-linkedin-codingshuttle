@@ -1,11 +1,17 @@
 import { useState } from 'react';
 import { ThumbsUp, MessageCircle } from 'lucide-react';
 import { postsService } from '../services/postsService';
+import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
 const PostCard = ({ post }) => {
-  const [liked, setLiked] = useState(false);
-  const [likesCount, setLikesCount] = useState(post.likesCount || 0);
+  const { user } = useAuth();
+  
+  // Check if current user has liked this post by checking if their ID is in the likedByUserIds array
+  const isLikedByCurrentUser = post.likedByUserIds?.includes(user?.id) || false;
+  
+  const [liked, setLiked] = useState(isLikedByCurrentUser);
+  const [likesCount, setLikesCount] = useState(post.likedByUserIds?.length || 0);
 
   const handleLike = async () => {
     try {

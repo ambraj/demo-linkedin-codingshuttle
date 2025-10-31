@@ -29,3 +29,5 @@ eureka:
 
 server:
   port: 9040
+  servlet:
+      context-path: /notification

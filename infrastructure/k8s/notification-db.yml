@@ -17,10 +17,10 @@ spec:
         - name: notification-db
           image: postgres:latest
           resources:
-            requests:
+            limits:
               memory: "200Mi"
               cpu: "250m"
-            limits:
+            requests:
               memory: "100Mi"
               cpu: "100m"
           env:
@@ -48,7 +48,7 @@ spec:
         resources:
           requests:
             storage: 1Gi
-        storageClassName: "standard-rwo"
+        storageClassName: "standard"
         volumeMode: Filesystem
 
 ---

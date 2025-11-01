@@ -5,9 +5,9 @@ metadata:
   labels:
     name: myingress
   annotations:
-    kubernetes.io/ingress.class: "gce"
     kubernetes.io/ingress.allow-http: "true"
 spec:
+  ingressClassName: nginx
   rules:
   - http:
       paths:

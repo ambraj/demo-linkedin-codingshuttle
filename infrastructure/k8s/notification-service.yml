@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: notification-service
-          image: ambraj/notification-service
+          image: ambraj/notification-service:v1.0.0
           resources:
             limits:
               memory: "400Mi"

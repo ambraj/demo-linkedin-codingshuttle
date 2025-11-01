@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: api-gateway
-        image: ambraj/api-gateway
+        image: ambraj/api-gateway:v1.0.0
         resources:
           limits:
               memory: "500Mi"

@@ -44,7 +44,7 @@ services:
 # ---------------------------------------------------------------------- #
 
   discovery-server:
-    image: ambraj/discovery-server
+    image: ambraj/discovery-server:v1.0.0
     container_name: discovery-server
     ports:
       - "8761:8761"
@@ -52,7 +52,7 @@ services:
       - linkedin-network
 
   api-gateway:
-    image: ambraj/api-gateway
+    image: ambraj/api-gateway:v1.0.0
     container_name: api-gateway
     ports:
       - "8080:8080"
@@ -78,7 +78,7 @@ services:
       - linkedin-network
 
   users-service:
-    image: ambraj/users-service
+    image: ambraj/users-service:v1.0.0
     container_name: users-service
     ports:
       - "9010:8080"
@@ -110,7 +110,7 @@ services:
       - linkedin-network
 
   posts-service:
-    image: ambraj/posts-service
+    image: ambraj/posts-service:v1.0.0
     container_name: posts-service
     ports:
       - "9020:8080"
@@ -142,7 +142,7 @@ services:
       - linkedin-network
 
   connections-service:
-    image: ambraj/connections-service
+    image: ambraj/connections-service:v1.0.0
     container_name: connections-service
     ports:
       - "9030:8080"
@@ -174,7 +174,7 @@ services:
       - linkedin-network
 
   notification-service:
-    image: ambraj/notification-service
+    image: ambraj/notification-service:v1.0.0
     container_name: notification-service
     ports:
       - "9040:8080"

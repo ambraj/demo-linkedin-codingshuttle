@@ -4,6 +4,10 @@ eureka:
     register-with-eureka: false
     fetch-registry: false
 
+spring:
+  kafka:
+    bootstrap-servers: kafka:9092
+
 USERS_SERVICE_URI: http://users-service
 POSTS_SERVICE_URI: http://posts-service
 CONNECTIONS_SERVICE_URI: http://connections-service

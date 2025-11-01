@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: connections-service
-        image: ambraj/connections-service
+        image: ambraj/connections-service:v1.0.0
         resources:
           limits:
             memory: "400Mi"

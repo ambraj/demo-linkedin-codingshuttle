@@ -17,7 +17,7 @@ group "default" {
 target "api-gateway" {
   dockerfile = "Dockerfile"
   context    = "../../backend/api-gateway"
-  tags       = ["ghcr.io/ambraj/api-gateway:latest"]
+  tags       = ["ghcr.io/ambraj/api-gateway:v1.0.0"]
   platforms  = ["linux/amd64", "linux/arm64"]
   cache-from = ["type=local,src=/tmp/docker-cache/api-gateway"]
   cache-to   = ["type=local,dest=/tmp/docker-cache/api-gateway"]
@@ -27,7 +27,7 @@ target "api-gateway" {
 target "connections-service" {
   dockerfile = "Dockerfile"
   context    = "../../backend/connections-service"
-  tags       = ["ghcr.io/ambraj/connections-service:latest"]
+  tags       = ["ghcr.io/ambraj/connections-service:v1.0.0"]
   platforms  = ["linux/amd64", "linux/arm64"]
   cache-from = ["type=local,src=/tmp/docker-cache/connections-service"]
   cache-to   = ["type=local,dest=/tmp/docker-cache/connections-service"]
@@ -37,7 +37,7 @@ target "connections-service" {
 target "discovery-server" {
   dockerfile = "Dockerfile"
   context    = "../../backend/discovery-server"
-  tags       = ["ghcr.io/ambraj/discovery-server:latest"]
+  tags       = ["ghcr.io/ambraj/discovery-server:v1.0.0"]
   platforms  = ["linux/amd64", "linux/arm64"]
   cache-from = ["type=local,src=/tmp/docker-cache/discovery-server"]
   cache-to   = ["type=local,dest=/tmp/docker-cache/discovery-server"]
@@ -47,7 +47,7 @@ target "discovery-server" {
 target "notification-service" {
   dockerfile = "Dockerfile"
   context    = "../../backend/notification-service"
-  tags       = ["ghcr.io/ambraj/notification-service:latest"]
+  tags       = ["ghcr.io/ambraj/notification-service:v1.0.0"]
   platforms  = ["linux/amd64", "linux/arm64"]
   cache-from = ["type=local,src=/tmp/docker-cache/notification-service"]
   cache-to   = ["type=local,dest=/tmp/docker-cache/notification-service"]
@@ -57,7 +57,7 @@ target "notification-service" {
 target "posts-service" {
   dockerfile = "Dockerfile"
   context    = "../../backend/posts-service"
-  tags       = ["ghcr.io/ambraj/posts-service:latest"]
+  tags       = ["ghcr.io/ambraj/posts-service:v1.0.0"]
   platforms  = ["linux/amd64", "linux/arm64"]
   cache-from = ["type=local,src=/tmp/docker-cache/posts-service"]
   cache-to   = ["type=local,dest=/tmp/docker-cache/posts-service"]
@@ -67,7 +67,7 @@ target "posts-service" {
 target "users-service" {
   dockerfile = "Dockerfile"
   context    = "../../backend/users-service"
-  tags       = ["ghcr.io/ambraj/users-service:latest"]
+  tags       = ["ghcr.io/ambraj/users-service:v1.0.0"]
   platforms  = ["linux/amd64", "linux/arm64"]
   cache-from = ["type=local,src=/tmp/docker-cache/users-service"]
   cache-to   = ["type=local,dest=/tmp/docker-cache/users-service"]

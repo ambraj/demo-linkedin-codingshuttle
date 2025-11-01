@@ -38,49 +38,13 @@ variable "MAVEN_OPTS" {
 # Define a group of targets to build
 group "default" {
   targets = [
-    "api-gateway",
-    "connections-service",
     "discovery-server",
-    "notification-service",
+    "api-gateway",
+    "users-service",
     "posts-service",
-    "users-service"
+    "connections-service",
+    "notification-service"
   ]
-}
-
-# API Gateway Service
-target "api-gateway" {
-  dockerfile = "Dockerfile"
-  context    = "../../backend/api-gateway"
-  tags       = [
-    "docker.io/ambraj/api-gateway:${API_GATEWAY_VERSION}",
-    "docker.io/ambraj/api-gateway:latest"
-  ]
-  platforms  = split(",", PLATFORMS)
-  output     = ["type=registry"]
-  labels     = {
-    "version" = "${API_GATEWAY_VERSION}"
-  }
-  args = {
-    MAVEN_OPTS = "${MAVEN_OPTS}"
-  }
-}
-
-# Connections Service
-target "connections-service" {
-  dockerfile = "Dockerfile"
-  context    = "../../backend/connections-service"
-  tags       = [
-    "docker.io/ambraj/connections-service:${CONNECTIONS_SERVICE_VERSION}",
-    "docker.io/ambraj/connections-service:latest"
-  ]
-  platforms  = split(",", PLATFORMS)
-  output     = ["type=registry"]
-  labels     = {
-    "version" = "${CONNECTIONS_SERVICE_VERSION}"
-  }
-  args = {
-    MAVEN_OPTS = "${MAVEN_OPTS}"
-  }
 }
 
 # Discovery Server
@@ -101,18 +65,36 @@ target "discovery-server" {
   }
 }
 
-# Notification Service
-target "notification-service" {
+# API Gateway Service
+target "api-gateway" {
   dockerfile = "Dockerfile"
-  context    = "../../backend/notification-service"
+  context    = "../../backend/api-gateway"
   tags       = [
-    "docker.io/ambraj/notification-service:${NOTIFICATION_SERVICE_VERSION}",
-    "docker.io/ambraj/notification-service:latest"
+    "docker.io/ambraj/api-gateway:${API_GATEWAY_VERSION}",
+    "docker.io/ambraj/api-gateway:latest"
   ]
   platforms  = split(",", PLATFORMS)
   output     = ["type=registry"]
   labels     = {
-    "version" = "${NOTIFICATION_SERVICE_VERSION}"
+    "version" = "${API_GATEWAY_VERSION}"
+  }
+  args = {
+    MAVEN_OPTS = "${MAVEN_OPTS}"
+  }
+}
+
+# Users Service
+target "users-service" {
+  dockerfile = "Dockerfile"
+  context    = "../../backend/users-service"
+  tags       = [
+    "docker.io/ambraj/users-service:${USERS_SERVICE_VERSION}",
+    "docker.io/ambraj/users-service:latest"
+  ]
+  platforms  = split(",", PLATFORMS)
+  output     = ["type=registry"]
+  labels     = {
+    "version" = "${USERS_SERVICE_VERSION}"
   }
   args = {
     MAVEN_OPTS = "${MAVEN_OPTS}"
@@ -137,18 +119,36 @@ target "posts-service" {
   }
 }
 
-# Users Service
-target "users-service" {
+# Connections Service
+target "connections-service" {
   dockerfile = "Dockerfile"
-  context    = "../../backend/users-service"
+  context    = "../../backend/connections-service"
   tags       = [
-    "docker.io/ambraj/users-service:${USERS_SERVICE_VERSION}",
-    "docker.io/ambraj/users-service:latest"
+    "docker.io/ambraj/connections-service:${CONNECTIONS_SERVICE_VERSION}",
+    "docker.io/ambraj/connections-service:latest"
   ]
   platforms  = split(",", PLATFORMS)
   output     = ["type=registry"]
   labels     = {
-    "version" = "${USERS_SERVICE_VERSION}"
+    "version" = "${CONNECTIONS_SERVICE_VERSION}"
+  }
+  args = {
+    MAVEN_OPTS = "${MAVEN_OPTS}"
+  }
+}
+
+# Notification Service
+target "notification-service" {
+  dockerfile = "Dockerfile"
+  context    = "../../backend/notification-service"
+  tags       = [
+    "docker.io/ambraj/notification-service:${NOTIFICATION_SERVICE_VERSION}",
+    "docker.io/ambraj/notification-service:latest"
+  ]
+  platforms  = split(",", PLATFORMS)
+  output     = ["type=registry"]
+  labels     = {
+    "version" = "${NOTIFICATION_SERVICE_VERSION}"
   }
   args = {
     MAVEN_OPTS = "${MAVEN_OPTS}"

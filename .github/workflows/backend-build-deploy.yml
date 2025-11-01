@@ -71,10 +71,3 @@ jobs:
           kubectl rollout restart deployment/posts-service -n default
           kubectl rollout restart deployment/connections-service -n default
           kubectl rollout restart deployment/notification-service -n default
-          
-          # Wait for deployments to roll out
-          kubectl rollout status deployment/api-gateway -n default --timeout=5m
-          kubectl rollout status deployment/users-service -n default --timeout=5m
-          kubectl rollout status deployment/posts-service -n default --timeout=5m
-          kubectl rollout status deployment/connections-service -n default --timeout=5m
-          kubectl rollout status deployment/notification-service -n default --timeout=5m

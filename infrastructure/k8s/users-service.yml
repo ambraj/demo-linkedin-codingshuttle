@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: users-service
-        image: ambraj/users-service
+        image: ambraj/users-service:v1.0.0
         imagePullPolicy: Always
         resources:
           limits:

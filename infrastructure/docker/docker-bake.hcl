@@ -61,7 +61,7 @@ target "api-gateway" {
     "version" = "${API_GATEWAY_VERSION}"
   }
   args = {
-    MAVEN_OPTS = var.MAVEN_OPTS
+    MAVEN_OPTS = "${MAVEN_OPTS}"
   }
 }
 
@@ -79,7 +79,7 @@ target "connections-service" {
     "version" = "${CONNECTIONS_SERVICE_VERSION}"
   }
   args = {
-    MAVEN_OPTS = var.MAVEN_OPTS
+    MAVEN_OPTS = "${MAVEN_OPTS}"
   }
 }
 
@@ -97,7 +97,7 @@ target "discovery-server" {
     "version" = "${DISCOVERY_SERVER_VERSION}"
   }
   args = {
-    MAVEN_OPTS = var.MAVEN_OPTS
+    MAVEN_OPTS = "${MAVEN_OPTS}"
   }
 }
 
@@ -115,7 +115,7 @@ target "notification-service" {
     "version" = "${NOTIFICATION_SERVICE_VERSION}"
   }
   args = {
-    MAVEN_OPTS = var.MAVEN_OPTS
+    MAVEN_OPTS = "${MAVEN_OPTS}"
   }
 }
 
@@ -133,7 +133,7 @@ target "posts-service" {
     "version" = "${POSTS_SERVICE_VERSION}"
   }
   args = {
-    MAVEN_OPTS = var.MAVEN_OPTS
+    MAVEN_OPTS = "${MAVEN_OPTS}"
   }
 }
 
@@ -151,6 +151,6 @@ target "users-service" {
     "version" = "${USERS_SERVICE_VERSION}"
   }
   args = {
-    MAVEN_OPTS = var.MAVEN_OPTS
+    MAVEN_OPTS = "${MAVEN_OPTS}"
   }
 }

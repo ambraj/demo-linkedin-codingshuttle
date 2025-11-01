@@ -33,7 +33,7 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Build and Push Multi-arch Docker images
-        uses: docker/bake-action@latest
+        uses: docker/bake-action@v6
         with:
           workdir: infrastructure/docker
           files: docker-bake.hcl

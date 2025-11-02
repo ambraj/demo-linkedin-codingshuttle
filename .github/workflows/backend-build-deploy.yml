@@ -59,6 +59,7 @@ jobs:
       - name: Deploy Services to GKE
         run: |
           # Apply service deployments
+          kubectl apply -f infrastructure/k8s/config-server.yml
           kubectl apply -f infrastructure/k8s/users-service.yml
           kubectl apply -f infrastructure/k8s/posts-service.yml
           kubectl apply -f infrastructure/k8s/connections-service.yml
@@ -66,6 +67,7 @@ jobs:
           kubectl apply -f infrastructure/k8s/api-gateway.yml
           
           # Restart deployments to reflect changes
+#          kubectl rollout restart deployment/config-server -n default
           kubectl rollout restart deployment/api-gateway -n default
           kubectl rollout restart deployment/users-service -n default
           kubectl rollout restart deployment/posts-service -n default

@@ -1,14 +1,29 @@
 # docker-bake.hcl
 
-# Platform configuration - Override with PLATFORMS env var
-# For CI (faster): export PLATFORMS="linux/amd64"
+# Define a group of targets to build
+group "default" {
+  targets = [
+    "discovery-server",
+    "config-server",
+    "api-gateway",
+    "users-service",
+    "posts-service",
+    "connections-service",
+    "notification-service"
+  ]
+}
+
 # For production: export PLATFORMS="linux/amd64,linux/arm64"
 variable "PLATFORMS" {
   default = "linux/amd64,linux/arm64"
 }
 
 variable "API_GATEWAY_VERSION" {
-  default = "v1.0.1"
+  default = "v1.0.3"
+}
+
+variable "CONFIG_SERVER_VERSION" {
+  default = "v1.0.0"
 }
 
 variable "CONNECTIONS_SERVICE_VERSION" {
@@ -35,18 +50,6 @@ variable "MAVEN_OPTS" {
   default = "-Dmaven.artifact.threads=5 -Dhttp.keepAlive=false"
 }
 
-# Define a group of targets to build
-group "default" {
-  targets = [
-    "discovery-server",
-    "api-gateway",
-    "users-service",
-    "posts-service",
-    "connections-service",
-    "notification-service"
-  ]
-}
-
 # Discovery Server
 target "discovery-server" {
   dockerfile = "Dockerfile"
@@ -59,6 +62,24 @@ target "discovery-server" {
   output     = ["type=registry"]
   labels     = {
     "version" = "${DISCOVERY_SERVER_VERSION}"
+  }
+  args = {
+    MAVEN_OPTS = "${MAVEN_OPTS}"
+  }
+}
+
+# Config Server
+target "config-server" {
+  dockerfile = "Dockerfile"
+  context    = "../../backend/config-server"
+  tags       = [
+    "docker.io/ambraj/config-server:${CONFIG_SERVER_VERSION}",
+    "docker.io/ambraj/config-server:latest"
+  ]
+  platforms  = split(",", PLATFORMS)
+  output     = ["type=registry"]
+  labels     = {
+    "version" = "${CONFIG_SERVER_VERSION}"
   }
   args = {
     MAVEN_OPTS = "${MAVEN_OPTS}"

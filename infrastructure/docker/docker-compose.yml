@@ -52,13 +52,25 @@ services:
       - linkedin-network
 
   api-gateway:
-    image: ambraj/api-gateway:v1.0.0
+    image: ambraj/api-gateway:v1.0.3
     container_name: api-gateway
     ports:
       - "8080:8080"
     depends_on:
       - discovery-server
     networks:
+      - linkedin-network
+
+# ---------------------------------------------------------------------- #
+
+  config-server:
+      image: ambraj/config-server:v1.0.0
+      container_name: config-server
+      ports:
+      - "8888:8888"
+      depends_on:
+      - discovery-server
+      networks:
       - linkedin-network
 
 # ---------------------------------------------------------------------- #

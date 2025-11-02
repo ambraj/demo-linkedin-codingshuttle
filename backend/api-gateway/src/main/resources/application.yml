@@ -1,57 +1,5 @@
 spring:
   application:
     name: api-gateway
-  cloud:
-    gateway:
-      routes:
-        - id: users-service
-          uri: ${USERS_SERVICE_URI:lb://USERS-SERVICE}
-          predicates:
-            - Path=/api/v1/users/auth/**
-          filters:
-            - StripPrefix=2
-
-        - id: posts-service
-          uri: ${POSTS_SERVICE_URI:lb://POSTS-SERVICE}
-          predicates:
-            - Path=/api/v1/posts/**
-          filters:
-            - StripPrefix=2
-            - name: AuthenticationFilter
-
-        - id: connections-service
-          uri: ${CONNECTIONS_SERVICE_URI:lb://CONNECTIONS-SERVICE}
-          predicates:
-            - Path=/api/v1/connections/**
-          filters:
-            - StripPrefix=2
-            - name: AuthenticationFilter
-
-        - id: notifications-service
-          uri: ${NOTIFICATION_SERVICE_URI:lb://NOTIFICATION-SERVICE}
-          predicates:
-            - Path=/api/v1/notification/**
-          filters:
-            - StripPrefix=2
-            - name: AuthenticationFilter
-
-eureka:
-  client:
-    serviceUrl:
-      defaultZone: http://discovery-server:8761/eureka/
-
-server:
-  port: 8080
-
-logging:
-  level:
-    org.springframework.cloud.gateway: TRACE
-
-management:
-  endpoints:
-    web:
-      exposure:
-        include: "*"
-
-jwt:
-  secret: kljahgkh-iahgashg-asfgadgh-ahasfh-adhafdh-adhadhadhkhasgkhaskgh
+  config:
+    import: configserver:http://config-server:8888

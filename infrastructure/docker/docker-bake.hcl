@@ -27,7 +27,7 @@ variable "CONFIG_SERVER_VERSION" {
 }
 
 variable "API_GATEWAY_VERSION" {
-  default = "v1.0.3"
+  default = "v1.0.4"
 }
 
 variable "CONNECTIONS_SERVICE_VERSION" {

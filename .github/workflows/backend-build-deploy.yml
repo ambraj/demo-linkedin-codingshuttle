@@ -1,16 +1,16 @@
-name: LinkedIn CI-CD
-
-on:
-  push:
-    branches: [ "main" ]
-  workflow_dispatch:
-
-env:
-  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
-  GKE_CLUSTER: linkedin-app
-  GKE_ZONE: us-central1
-
-jobs:
+#name: LinkedIn CI-CD
+#
+#on:
+#  push:
+#    branches: [ "main" ]
+#  workflow_dispatch:
+#
+#env:
+#  PROJECT_ID: ${{ secrets.GKE_PROJECT }}
+#  GKE_CLUSTER: linkedin-app
+#  GKE_ZONE: us-central1
+#
+#jobs:
 #  build:
 #    runs-on: ubuntu-latest
 #    steps:
@@ -31,45 +31,45 @@ jobs:
 #        with:
 #          files: infrastructure/docker/docker-bake.hcl
 #          push: true
-
-  deploy:
-    # needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v2
-        with:
-          credentials_json: ${{ secrets.GK_SA_KEY }}
-
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: Install gke-gcloud-auth-plugin
-        run: gcloud components install gke-gcloud-auth-plugin
-
-      - name: Get GKE credentials
-        run: |
-          gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} \
-            --zone ${{ env.GKE_ZONE }} \
-            --project ${{ env.PROJECT_ID }}
-
-      - name: Deploy Services to GKE
-        run: |
-          # Apply service deployments
-          kubectl apply -f infrastructure/k8s/config-server.yml
-          kubectl apply -f infrastructure/k8s/users-service.yml
-          kubectl apply -f infrastructure/k8s/posts-service.yml
-          kubectl apply -f infrastructure/k8s/connections-service.yml
-          kubectl apply -f infrastructure/k8s/notification-service.yml
-          kubectl apply -f infrastructure/k8s/api-gateway.yml
-          
-          # Restart deployments to reflect changes
-          kubectl rollout restart deployment/config-server -n default
-          kubectl rollout restart deployment/api-gateway -n default
-          kubectl rollout restart deployment/users-service -n default
-          kubectl rollout restart deployment/posts-service -n default
-          kubectl rollout restart deployment/connections-service -n default
-          kubectl rollout restart deployment/notification-service -n default
+#
+#  deploy:
+#    # needs: build
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Checkout code
+#        uses: actions/checkout@v4
+#
+#      - name: Authenticate to Google Cloud
+#        uses: google-github-actions/auth@v2
+#        with:
+#          credentials_json: ${{ secrets.GK_SA_KEY }}
+#
+#      - name: Set up Cloud SDK
+#        uses: google-github-actions/setup-gcloud@v2
+#
+#      - name: Install gke-gcloud-auth-plugin
+#        run: gcloud components install gke-gcloud-auth-plugin
+#
+#      - name: Get GKE credentials
+#        run: |
+#          gcloud container clusters get-credentials ${{ env.GKE_CLUSTER }} \
+#            --zone ${{ env.GKE_ZONE }} \
+#            --project ${{ env.PROJECT_ID }}
+#
+#      - name: Deploy Services to GKE
+#        run: |
+#          # Apply service deployments
+#          kubectl apply -f infrastructure/k8s/config-server.yml
+#          kubectl apply -f infrastructure/k8s/users-service.yml
+#          kubectl apply -f infrastructure/k8s/posts-service.yml
+#          kubectl apply -f infrastructure/k8s/connections-service.yml
+#          kubectl apply -f infrastructure/k8s/notification-service.yml
+#          kubectl apply -f infrastructure/k8s/api-gateway.yml
+#
+#          # Restart deployments to reflect changes
+#          kubectl rollout restart deployment/config-server -n default
+#          kubectl rollout restart deployment/api-gateway -n default
+#          kubectl rollout restart deployment/users-service -n default
+#          kubectl rollout restart deployment/posts-service -n default
+#          kubectl rollout restart deployment/connections-service -n default
+#          kubectl rollout restart deployment/notification-service -n default

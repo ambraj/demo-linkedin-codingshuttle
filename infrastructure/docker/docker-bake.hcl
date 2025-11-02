@@ -18,19 +18,19 @@ variable "PLATFORMS" {
   default = "linux/amd64,linux/arm64"
 }
 
+variable "DISCOVERY_SERVER_VERSION" {
+  default = "v1.0.0"
+}
+
+variable "CONFIG_SERVER_VERSION" {
+  default = "v1.0.1"
+}
+
 variable "API_GATEWAY_VERSION" {
   default = "v1.0.3"
 }
 
-variable "CONFIG_SERVER_VERSION" {
-  default = "v1.0.0"
-}
-
 variable "CONNECTIONS_SERVICE_VERSION" {
-  default = "v1.0.0"
-}
-
-variable "DISCOVERY_SERVER_VERSION" {
   default = "v1.0.0"
 }
 

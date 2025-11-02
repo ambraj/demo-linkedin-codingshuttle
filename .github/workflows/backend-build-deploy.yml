@@ -67,6 +67,7 @@ jobs:
           kubectl apply -f infrastructure/k8s/api-gateway.yml
           
           # Restart deployments to reflect changes
+          kubectl rollout restart deployment/config-server -n default
           kubectl rollout restart deployment/api-gateway -n default
           kubectl rollout restart deployment/users-service -n default
           kubectl rollout restart deployment/posts-service -n default

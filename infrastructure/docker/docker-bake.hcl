@@ -3,13 +3,13 @@
 # Define a group of targets to build
 group "default" {
   targets = [
-    # "discovery-server",
+    "discovery-server",
     "config-server",
-    "api-gateway"
-    # "users-service",
-    # "posts-service",
-    # "connections-service",
-    # "notification-service"
+    "api-gateway",
+    "users-service",
+    "posts-service",
+    "connections-service",
+    "notification-service"
   ]
 }
 

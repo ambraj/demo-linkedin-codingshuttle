@@ -6,7 +6,7 @@ spring:
       server:
         git:
           uri: https://github.com/ambraj/codingshuttle-linkedin-app-config-server
-          password: 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
+          password: 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
           username: ambraj
           default-label: main
 

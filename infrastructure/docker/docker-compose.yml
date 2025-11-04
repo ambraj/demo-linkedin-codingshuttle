@@ -51,6 +51,16 @@ services:
     networks:
       - linkedin-network
 
+  config-server:
+    image: ambraj/config-server:v1.0.2
+    container_name: config-server
+    ports:
+      - "8888:8888"
+    depends_on:
+      - discovery-server
+    networks:
+      - linkedin-network
+
   api-gateway:
     image: ambraj/api-gateway:v1.0.3
     container_name: api-gateway
@@ -59,18 +69,6 @@ services:
     depends_on:
       - discovery-server
     networks:
-      - linkedin-network
-
-# ---------------------------------------------------------------------- #
-
-  config-server:
-      image: ambraj/config-server:v1.0.1
-      container_name: config-server
-      ports:
-      - "8888:8888"
-      depends_on:
-      - discovery-server
-      networks:
       - linkedin-network
 
 # ---------------------------------------------------------------------- #

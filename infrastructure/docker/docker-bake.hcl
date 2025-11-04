@@ -23,7 +23,7 @@ variable "DISCOVERY_SERVER_VERSION" {
 }
 
 variable "CONFIG_SERVER_VERSION" {
-  default = "v1.0.1"
+  default = "v1.0.2"
 }
 
 variable "API_GATEWAY_VERSION" {

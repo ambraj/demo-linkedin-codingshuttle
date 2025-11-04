@@ -1,3 +1,13 @@
+spring:
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/ambraj/codingshuttle-linkedin-app-config-server
+          username: ${GIT_USERNAME:ambraj}
+          password: ${GIT_PASSWORD}
+          default-label: main
+
 # disable eureka client
 eureka:
   client:

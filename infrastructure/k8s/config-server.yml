@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: config-server
-          image: ambraj/config-server:v1.0.1
+          image: ambraj/config-server:v1.0.2
           resources:
             limits:
               memory: "200Mi"
@@ -26,6 +26,16 @@ spec:
           env:
             - name: SPRING_PROFILES_ACTIVE
               value: k8s
+            - name: GIT_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: git-credentials
+                  key: username
+            - name: GIT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: git-credentials
+                  key: password
 
 ---
 apiVersion: v1

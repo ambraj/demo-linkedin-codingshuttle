@@ -6,8 +6,8 @@ spring:
       server:
         git:
           uri: https://github.com/ambraj/codingshuttle-linkedin-app-config-server
-          password: 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
-          username: ambraj
+          password: ${GIT_PASSWORD}
+          username: ${GIT_USERNAME:ambraj}
           default-label: main
 
 eureka:

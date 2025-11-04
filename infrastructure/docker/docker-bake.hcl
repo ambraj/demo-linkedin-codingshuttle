@@ -3,13 +3,13 @@
 # Define a group of targets to build
 group "default" {
   targets = [
-    "discovery-server",
+    # "discovery-server",
     "config-server",
-    "api-gateway",
-    "users-service",
-    "posts-service",
-    "connections-service",
-    "notification-service"
+    "api-gateway"
+    # "users-service",
+    # "posts-service",
+    # "connections-service",
+    # "notification-service"
   ]
 }
 
@@ -23,7 +23,7 @@ variable "DISCOVERY_SERVER_VERSION" {
 }
 
 variable "CONFIG_SERVER_VERSION" {
-  default = "v1.0.2"
+  default = "v1.0.3"
 }
 
 variable "API_GATEWAY_VERSION" {

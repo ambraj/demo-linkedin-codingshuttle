@@ -23,3 +23,12 @@
 hs_err_pid*
 replay_pid*
 
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+**/application-secrets.yml
+**/*-secrets.yml
+infrastructure/k8s/*-secret.yml
+!infrastructure/k8s/*-secret.yml.template
+

@@ -56,6 +56,9 @@ services:
     container_name: config-server
     ports:
       - "8888:8888"
+    environment:
+      - GIT_USERNAME=${GIT_USERNAME}
+      - GIT_PASSWORD=${GIT_PASSWORD}
     depends_on:
       - discovery-server
     networks:
